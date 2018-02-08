@@ -3,12 +3,13 @@ const express = require('express'),
       bodyParser = require('body-parser'),
       moment  = require('moment');
 const app = express();
-const port = 80;
+const port = 3003;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
-app.get('/get', (req, res) => {
+app.get('/', (req, res) => {
+	console.log("getting the request");
 	const roomName = req.query.name,
 		    data     = getData(roomName);
   res.send(data || {});
@@ -35,8 +36,7 @@ function getData(roomName) {
 }
 
 function saveData(req) {
-  // the sensor sketch sends id insted of name; dont want to reprogram the sensor
-	const name = req.body.id;
+	const name = req.body.name;
   const rawData = {
     "name":name,
     "datetime" : moment().format('h:mm:ss a, Do MMMM'),
