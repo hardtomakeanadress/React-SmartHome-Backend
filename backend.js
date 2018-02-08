@@ -15,6 +15,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/get', (req, res) => {
+  console.log(req.query);
   saveData(
     req.query.room,
     req.query.humidity,
