@@ -1,22 +1,25 @@
-const express = require('express'),
-      fs      = require('fs'),
-      bodyParser = require('body-parser'),
-      moment  = require('moment');
+const express = require('express');
+const fs      = require('fs');
+const bodyParser = require('body-parser');
+const moment  = require('moment');
 const app = express();
 const port = 3003;
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({extended: true}));
 
 app.get('/', (req, res) => {
-	console.log("getting the request");
-	const roomName = req.query.name,
-		    data     = getData(roomName);
+	const roomName = req.query.name;
+	const data     = getData(roomName);
   res.send(data || {});
 });
 
-app.post('/post', (req, res) => {
-  saveData(req);
+app.get('/get', (req, res) => {
+  saveData(
+    req.query.room,
+    req.query.humidity,
+    req.query.temperature,
+    req.query.voltage);
   res.sendStatus(200);
 });
 
@@ -35,17 +38,16 @@ function getData(roomName) {
   }
 }
 
-function saveData(req) {
-	const name = req.body.name;
+function saveData(room, humidity, temperature, voltage) {
+  
   const rawData = {
-    "name":name,
+    "room":room,
     "datetime" : moment().format('h:mm:ss a, Do MMMM'),
-    "temperature": req.body.temperature,
-    "humidity": req.body.humidity,
-    "voltage": req.body.voltage};
+    "temperature": temperature,
+    "humidity": humidity,
+    "voltage": voltage};
   const	data   = JSON.stringify(rawData);
-  const	roomFile = String(name) + ".json";	
+  const	roomFile = String(room) + ".json";	
   fs.writeFileSync(roomFile, data);
 }
-
 app.listen(port, () => console.log(`Back-end listening on port ${port}`));
