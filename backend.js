@@ -18,9 +18,9 @@ app.get('/', (req, res) => {
 //there were some issues using post request from arduino
 function isError(room, humidity, temperature, voltage) {
   if ((!room) || 
-      (humidity == NaN) || 
-      (temperature == NaN) || 
-      (voltage == NaN))
+      (isNaN(humidity)) || 
+      (isNaN(temperature)) || 
+      (isNaN(voltage)))
     return true;
   else
     return false;
@@ -42,7 +42,6 @@ app.get('/get', (req, res) => {
 function getData(roomName) {
   //if no parameter is received, we are returning all the room names in rooms.js file
   if (!roomName) {
-    
     const raw_data_file = fs.readFileSync('rooms.json');
     return JSON.parse(raw_data_file);  
   }
@@ -55,7 +54,6 @@ function getData(roomName) {
 }
 
 function saveData(room, humidity, temperature, voltage) {
- console.log(temperature);  
   const rawData = {
     "room":room,
     "datetime" : moment().format('h:mm:ss a, Do MMMM'),
