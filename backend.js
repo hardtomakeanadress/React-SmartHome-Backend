@@ -42,12 +42,12 @@ app.get('/get', (req, res) => {
 
 function getData(roomName) {
   console.log('this is the room name', roomName);
-  //if no parameter is received, we are returning all the room names in rooms.js file
+  const rooms = ["kitchen", "bedroom ", "office ", "bathroom ", "balcony"];
+  //if no parameter is received, we are returning an array of rooms
   if (!roomName) {
-    const raw_data_file = fs.readFileSync('rooms.json');
-    const data = JSON.parse(raw_data_file);
-    console.log('this is the rooms file', data);
-    return data;  
+    // const raw_data_file = fs.readFileSync('rooms.json');
+    // const data = JSON.parse(raw_data_file);
+    return rooms;  
   }
   //if parameter with a room name is received, we are returning the room file
   else {
