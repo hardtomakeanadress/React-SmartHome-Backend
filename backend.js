@@ -15,7 +15,6 @@ app.get('/', (req, res) => {
 });
 
 app.get('/get', (req, res) => {
-  console.log(req.query);
   saveData(
     req.query.room,
     req.query.humidity,
@@ -40,7 +39,7 @@ function getData(roomName) {
 }
 
 function saveData(room, humidity, temperature, voltage) {
-  
+ console.log(temperature);  
   const rawData = {
     "room":room,
     "datetime" : moment().format('h:mm:ss a, Do MMMM'),
