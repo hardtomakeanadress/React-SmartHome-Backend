@@ -8,6 +8,7 @@ const port = 3003;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
+
 app.get('/', (req, res) => {
 	const roomName = req.query.name;
 	const data     = getData(roomName);
@@ -40,16 +41,21 @@ app.get('/get', (req, res) => {
 });
 
 function getData(roomName) {
+  console.log('this is the room name', roomName);
   //if no parameter is received, we are returning all the room names in rooms.js file
   if (!roomName) {
     const raw_data_file = fs.readFileSync('rooms.json');
-    return JSON.parse(raw_data_file);  
+    const data = JSON.parse(raw_data_file);
+    console.log('this is the rooms file', data);
+    return data;  
   }
   //if parameter with a room name is received, we are returning the room file
   else {
     const roomFile = `${roomName}.json`;
     const raw_data_file = fs.readFileSync(roomFile);
-    return JSON.parse(raw_data_file);
+    const data = JSON.parse(raw_data_file);
+    console.log('this is the a room file', data);
+    return data;
   }
 }
 
