@@ -14,13 +14,29 @@ app.get('/', (req, res) => {
   res.send(data || {});
 });
 
+//here we save the data from the get request parameters;
+//there were some issues using post request from arduino
+function isError(room, humidity, temperature, voltage) {
+  if ((!room) || 
+      (humidity == NaN) || 
+      (temperature == NaN) || 
+      (voltage == NaN))
+    return true;
+  else
+    return false;
+}
+
 app.get('/get', (req, res) => {
-  saveData(
-    req.query.room,
-    req.query.humidity,
-    req.query.temperature,
-    req.query.voltage);
-  res.sendStatus(200);
+  if (!isError(req.query.room, req.query.humidity, req.query.temperature,req.query.voltage)) {
+    saveData(
+      req.query.room,
+      req.query.humidity,
+      req.query.temperature,
+      req.query.voltage);
+    res.sendStatus(200);
+  }
+  else
+  res.sendStatus(403);
 });
 
 function getData(roomName) {
