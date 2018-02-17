@@ -10,6 +10,7 @@ app.use(cors());
 
 //entry point to get one or all resources
 app.get('/', (req, res) => {
+console.log("getting a requst");
 	const roomName = req.query.name;
   const response = getData(roomName);
   res.send(response);
