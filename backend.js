@@ -7,9 +7,8 @@ const app = express();
 const port = 3003;
 
 app.use(cors());
-// app.use(bodyParser.json());
-// app.use(bodyParser.urlencoded({extended: true}));
 
+//entry point to get one or all resources
 app.get('/', (req, res) => {
 	const roomName = req.query.name;
   const response = getData(roomName);
@@ -20,11 +19,7 @@ app.get('/', (req, res) => {
 //there were some issues using post request from arduino
 app.get('/get', (req, res) => {
   if (!isError(req.query.room, req.query.humidity, req.query.temperature,req.query.voltage)) {
-    saveData(
-      req.query.room,
-      req.query.humidity,
-      req.query.temperature,
-      req.query.voltage);
+    saveData(req.query.room,req.query.humidity,req.query.temperature,req.query.voltage);
     res.sendStatus(200);
   }
   else
@@ -44,7 +39,14 @@ function isError(room, humidity, temperature, voltage) {
 function getData(roomName) {
   //if no parameter is received, we are returning all the rooms
   if (!roomName) {
-    const data = ["kitchen","balcony","bedroom","office","bathroom"];
+    const rooms = ["balcony","bathroom","bedroom","kitchen","office"];
+    const data = [];
+    rooms.forEach(each => {
+      const roomFileName = `${each}.json`;
+      const rawDataFile  = fs.readFileSync(roomFileName);
+      const roomObject   = JSON.parse(rawDataFile);
+      data.push(roomObject);
+    });
 		return data;
   }
   //if parameter with a room name is received, we are returning the room file
